@@ -1,0 +1,19 @@
+language: go
+
+
+go:
+  - 1.9.x
+
+before_script:
+  - go get -u -t -v github.com/smallnest/rpcx/...
+  - go get github.com/mattn/goveralls
+
+script:
+ - go test -v ./...
+ - goveralls -service=travis-ci
+
+notifications:
+  email:
+    recipients: smallnest@gmail.com
+    on_success: change
+    on_failure: always
