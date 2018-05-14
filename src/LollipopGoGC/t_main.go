@@ -29,7 +29,8 @@ func TJWanJiaData(w http.ResponseWriter, req *http.Request) {
 // 主函数
 func main() {
 	http.HandleFunc("/TJData", TJWanJiaData) // 获取统计
-	err := http.ListenAndServe(":7878", nil)
+	//err := http.ListenAndServe(":7878", nil)
+	err := http.ListenAndServeTLS(":7878", "cert.pem", "key.pem", nil)
 	if err != nil {
 		glog.Info("Entry nil", err.Error())
 		return
