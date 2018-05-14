@@ -1,0 +1,39 @@
+Go支持https协议的简单例子
+
+我们知道除了http方式访问网页之外，还有一种加密的https方式。Go语言的net/http包中包含了这种https页面访问方式的支持。net/http包中的ListenAndServeTLS就是提供这个功能的。我们可以先看一下这个函数的原型。
+
+
+func ListenAndServeTLS(addr string, certFile string, keyFile string, handler Handler) error
+从上面的函数原型我们可以看出，其实和http方式的差别就在于需要提供一对公钥文件certFile和私钥文件keyFile。
+
+我们在linux下面可以使用下面的命令来生成一对测试的公钥和私钥文件。
+
+openssl genrsa -out key.pem 2048
+openssl req -new -x509 -key key.pem -out cert.pem -days 3650
+然后我们把cert.key和key.pem到拷贝到一个目录https_demo下面，然后再在这个目录下面创建一个simple_https.go文件，代码如下：
+
+package main
+ 
+import (
+    "io"
+    "log"
+    "net/http"
+)
+ 
+func helloHandler(w http.ResponseWriter, r *http.Request) {
+    io.WriteString(w, "hello world!")
+}
+ 
+func main() {
+    http.HandleFunc("/hello", helloHandler)
+    err := http.ListenAndServeTLS(":8080", "cert.pem", "key.pem", nil)
+    if err != nil {
+        log.Fatal("ListenAndServeTLS:", err.Error())
+    }
+}
+运行:
+go run https.go
+
+这时，监听本地端口8080，打开浏览器访问 https://localhost:8080/hello 就可以看到结果了。
+
+其实和普通的http比起来，就多了一对公钥和私钥而已。
