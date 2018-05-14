@@ -1,19 +1,3 @@
-package main
-
-//import (
-//	"fmt"
-//)
-
-//func init() {
-//	fmt.Println("Entry LollipopGoGS")
-//	return
-//}
-
-//func main() {
-
-//	return
-//}
-
 /*
  *
  * Copyright 2015 gRPC authors.
@@ -71,4 +55,3 @@ func main() {
 		log.Fatalf("failed to serve: %v", err)
 	}
 }
-

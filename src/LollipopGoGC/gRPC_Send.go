@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"time"
 
@@ -15,7 +17,7 @@ const (
 	defaultName = "world"
 )
 
-func main1() {
+func main1(w http.ResponseWriter, req *http.Request) {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
@@ -36,4 +38,5 @@ func main1() {
 		log.Fatalf("could not greet: %v", err)
 	}
 	log.Printf("Greeting: %s", r.Message)
+	fmt.Fprint(w, "Greeting: %s", r.Message)
 }
