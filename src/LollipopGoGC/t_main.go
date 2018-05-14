@@ -22,6 +22,7 @@ func TJWanJiaData(w http.ResponseWriter, req *http.Request) {
 		Protocol, bProtocol := req.Form["Protocol"]
 		Protocol2, bProtocol2 := req.Form["Protocol2"]
 		glog.Info("httpTask is running...", Protocol, bProtocol, Protocol2, bProtocol2)
+		main1()
 	}
 }
 
