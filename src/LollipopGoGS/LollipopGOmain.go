@@ -21,8 +21,11 @@
 package main
 
 import (
+	"LollipopGoGS/db_mysql"
+	"glog-master"
 	"log"
 	"net"
+	"strings"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -34,12 +37,20 @@ const (
 	port = ":50051"
 )
 
-// server is used to implement helloworld.GreeterServer.
 type server struct{}
 
-// SayHello implements helloworld.GreeterServer
+func Strings_Split(Data string, Split string) []string {
+	return strings.Split(Data, Split)
+}
+
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	return &pb.HelloReply{Message: "Hello " + in.Name}, nil
+	data := Strings_Split(in.Name, "☢")
+	if len(data) == 3 {
+		glog.Info("保存数据！！！")
+		dbif.RegNewUserForWeiXinTiWD(data[0], data[1], data[2], "", "", "")
+	}
+	//	return &pb.HelloReply{Message: "Hello " + in.Name}, nil
+	return &pb.HelloReply{Message: "Hello"}, nil
 }
 
 func main() {

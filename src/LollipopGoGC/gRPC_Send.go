@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"glog-master"
 	"log"
 	"net/http"
 	"os"
@@ -12,31 +13,34 @@ import (
 	pb "google.golang.org/grpc/examples/helloworld/helloworld"
 )
 
+// 问答或者吐槽保存
 const (
 	address     = "localhost:50051"
 	defaultName = "world"
 )
 
-func main1(w http.ResponseWriter, req *http.Request) {
-	// Set up a connection to the server.
+// 问答或则吐槽
+func WenDaOrTuCao(strnickName, stravatarUrl, strdata string, w http.ResponseWriter) {
+	glog.Info("strnickName, stravatarUrl, strparam", strnickName, stravatarUrl, strdata)
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
 	c := pb.NewGreeterClient(conn)
-
-	// Contact the server and print out its response.
-	name := defaultName
+	name := strnickName + "☢" + stravatarUrl + "☢" + strdata
 	if len(os.Args) > 1 {
 		name = os.Args[1]
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
+
 	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
 	log.Printf("Greeting: %s", r.Message)
-	fmt.Fprint(w, "Greeting: %s", r.Message)
+	//	fmt.Fprint(w, "Greeting: %s", r.Message)
+	fmt.Fprint(w, "1")
+	return
 }

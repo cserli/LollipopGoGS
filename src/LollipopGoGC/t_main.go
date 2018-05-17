@@ -3,6 +3,7 @@ package main
 import (
 	//"log"
 	//	"net"
+	"fmt"
 	"glog-master"
 	"net/http"
 
@@ -22,7 +23,26 @@ func TJWanJiaData(w http.ResponseWriter, req *http.Request) {
 		Protocol, bProtocol := req.Form["Protocol"]
 		Protocol2, bProtocol2 := req.Form["Protocol2"]
 		glog.Info("httpTask is running...", Protocol, bProtocol, Protocol2, bProtocol2)
-		main1(w, req)
+		if bProtocol && bProtocol2 {
+			// 主协议判断
+			if Protocol[0] == "1" {
+				switch Protocol2[0] {
+				case "2": // 发表吐槽
+					{
+						strnickName, _ := req.Form["nickName"]
+						stravatarUrl, _ := req.Form["avatarUrl"]
+						strparam, _ := req.Form["param"]
+						glog.Info("strparam", strparam)
+						// 发送给 gRPC--server
+						WenDaOrTuCao(strnickName[0], stravatarUrl[0], strparam[0], w)
+						break
+					}
+				default:
+					fmt.Fprint(w, "server Protocol2 default is Error！！！")
+					return
+				}
+			}
+		}
 	}
 }
 
